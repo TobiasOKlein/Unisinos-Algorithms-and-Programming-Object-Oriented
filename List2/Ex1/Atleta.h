@@ -9,13 +9,22 @@
 
 class Atleta{
     public:
-        char* getNome (void);
-        char* getIdade(void);
-        void  setNome (char nome);
-        void  setIdade(int idade);
+
+        Atleta ();
+        ~Atleta();
+
+        Atleta(char *);
+        Atleta(char *, int);
+        
+        char* getNome ( void );
+        int   getIdade( void );
+        void  setNome (char *);
+        void  setIdade( int  );
+        void  imprime_info( void );
+
     protected:
         char *nome;
         int  idade;
-}
+};
 
 #endif // __ATLETA_H__
