@@ -4,14 +4,14 @@
  */
 
 #include <iostream>
-#include <stack>
+#include "Nodo.h"
+#include "Pilha.h"
+#include "Fila.h"
 
-template <class templateTeste>
-templateTeste testando(templateTeste A, templateTeste B){
+template <class T> // tem que usar antes de todo método de classe que for usado
+T testando(T A, T B){
     return A + B;
 }
-
-std::stack<class Pilhosa> emPilha;
 
 int main(){
 
