@@ -8,12 +8,10 @@
 
 class Pilha{
     public:
-
+        Pilha();
+        ~Pilha();
     private:
-        Pilha *next;
-        Pilha *prev;
-        char  *name;
-        unsigned int pos;
+        
 };
 
 #endif // PILHA_H
