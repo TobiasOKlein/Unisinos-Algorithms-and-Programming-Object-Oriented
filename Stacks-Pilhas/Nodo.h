@@ -12,8 +12,8 @@ class Nodo{
         Nodo();
         ~Nodo();
 
-        void setNext(*Nodo);
-        void setPrev(*Nodo);
+        void setNext(void*);
+        void setPrev(void*);
         void setValue(T);
 
         Nodo* getNext();
@@ -21,10 +21,57 @@ class Nodo{
         T getValue();
 
     private:
-        Nodo *next;
-        Nodo *prev;
+        void *next;
+        void *prev;
         T    value;
-        unsigned int pos;
 };
 
-#endif // NODO_H
+
+template <class T>
+Nodo<T>::Nodo(){
+    prev = next = NULL;
+    value = 0;
+}
+
+
+template <class T>
+Nodo<T>::~Nodo(){}
+
+
+template <class T>
+void Nodo<T>::setNext(void *nextNode){
+    next = nextNode;
+}
+
+
+template <class T>
+void Nodo<T>::setPrev(void *prevNode){
+    prev = prevNode;
+}
+
+
+template <class T>
+void Nodo<T>::setValue(T val){
+    value = val;
+}
+
+
+template <class T>
+Nodo<T>* Nodo<T>::getNext(){
+    return static_cast<Nodo<T>*>(next);
+}
+
+
+template <class T>
+Nodo<T>* Nodo<T>::getPrev(){
+    return static_cast<Nodo<T>*>(prev);
+}
+
+
+template <class T>
+T Nodo<T>::getValue(){
+    return value;
+}
+
+
+#endif // NODO_H //
