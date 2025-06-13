@@ -13,23 +13,31 @@ class Lista{
     public:
         Lista();
         ~Lista();
-        void insert(T value);
-        Nodo<T>* remove();
-        Nodo<T>* getFirst();
-        Nodo<T>* getLast();
+
+        void pushBack(T value);
+        void pushFront(T value);
+        
+        Nodo<T>* popBack();
+        Nodo<T>* popFront();
+
+        Nodo<T>* popValue(T value);
+
+        Nodo<T>* getBack();
+        Nodo<T>* getFront();
+
         signed char getSize();
         void clear();
 
     private:
-        Nodo<T> *first;
-        Nodo<T> *last;
+        Nodo<T> *front;
+        Nodo<T> *back;
         signed char tamanho;
 };
 
 
 template <class T>
 Lista<T>::Lista(){
-    first = NULL;
+    front = NULL;
     tamanho = 0;
 }
 
@@ -44,14 +52,14 @@ signed char Lista<T>::getSize() {
 
 
 template <class T>
-Nodo<T>* Lista<T>::getFirst() {
-    return first;
+Nodo<T>* Lista<T>::getFront() {
+    return front;
 }
 
 
 template <class T>
-Nodo<T>* Lista<T>::getLast() {
-    Nodo<T>* current = first;
+Nodo<T>* Lista<T>::getBack() {
+    Nodo<T>* current = front;
     while (current != NULL && current->getPrev() != NULL) {
         current = current->getPrev();
     }
@@ -60,36 +68,78 @@ Nodo<T>* Lista<T>::getLast() {
 
 
 template <class T>
-void Lista<T>::insert(T value) {
-    Nodo<T>* newNode = new Nodo<T>();
-    newNode->setValue(value);
-    newNode->setPrev(first);
-    if (first != NULL) {
-        first->setNext(newNode);
+void Lista<T>::pushBack(T value) {
+    Nodo<T>* novoNodo = new Nodo<T>();
+    novoNodo->setValue(value);
+    novoNodo->setPrev(back);
+    if (front != NULL) {
+        back->setNext(novoNodo);
     }
-    newNode->setNext(NULL);
-    first = newNode;
+    novoNodo->setNext(NULL);
+    back = novoNodo;
+    tamanho++;
+}
+
+template <class T>
+void Lista<T>::pushFront(T value) {
+    Nodo<T>* novoNodo = new Nodo<T>();
+    novoNodo->setValue(value);
+    novoNodo->setNext(front);
+    if (back != NULL) {
+        front->setPrev(novoNodo);
+    }
+    novoNodo->setPrev(NULL);
+    front = novoNodo;
     tamanho++;
 }
 
 
 template <class T>
-Nodo<T>* Lista<T>::remove() {
-    if (first == NULL) {
+Nodo<T>* Lista<T>::popFront() {
+    if (front == NULL) {
         return NULL; // Lista vazia
     }
-    Nodo<T>* nodefronfirst = first;
-    first = first->getPrev();
+    Nodo<T>* nodoFrente = front;
+    front = front->getPrev();
     tamanho--;
-    return nodefronfirst;
+    return nodoFrente;
+}
+
+
+template <class T>
+Nodo<T>* Lista<T>::popBack() {
+    if (back == NULL) {
+        return NULL; // Lista vazia
+    }
+    Nodo<T>* nodoAtras = back;
+    back = back->getNext();
+    tamanho--;
+    return nodoAtras;
+}
+
+
+template <class T>
+Nodo<T>* Lista<T>::popValue(T value) {
+    Nodo<T>* nodoDeBusca = front;
+    while (nodoDeBusca->getValue != NULL) {
+        if (nodoDeBusca->getValue() == value) {
+            nodoDeBusca->getFront();
+            return nodoDeBusca->popPrev();
+        }
+        else if (nodoDeBusca->getValue() == value) {
+            nodoDeBusca->getBack();
+            return nodoDeBusca->popNext();
+        }
+        nodoDeBusca = nodoDeBusca->getPrev();
+    }
 }
 
 
 template <class T>
 void Lista<T>::clear() {
-    while (first != NULL) {
-        Nodo<T>* nodeToDelete = first;
-        first = first->getPrev();
+    while (front != NULL) {
+        Nodo<T>* nodeToDelete = front;
+        front = front->getPrev();
         delete nodeToDelete;
     }
     tamanho = 0; // Reseta os contadores
