@@ -6,6 +6,8 @@
 #ifndef NODO_H
 #define NODO_H
 
+// CLASS
+
 template <class T>
 class Nodo{
     public:
@@ -26,6 +28,7 @@ class Nodo{
         T    value;
 };
 
+// FUNCTIONS
 
 template <class T>
 Nodo<T>::Nodo(){

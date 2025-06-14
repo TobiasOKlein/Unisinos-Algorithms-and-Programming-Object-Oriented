@@ -26,18 +26,21 @@ class Lista{
         Nodo<T>* getFront();
 
         signed char getSize();
+        void ordenar();
         void clear();
 
     private:
-        Nodo<T> *front;
-        Nodo<T> *back;
+        Nodo<T> *front; // Seria a posição 0
+        Nodo<T> *back; // Seria a posição maxima
         signed char tamanho;
+        signed char prioridade;
 };
 
 
 template <class T>
 Lista<T>::Lista(){
     front = NULL;
+    back  = NULL;
     tamanho = 0;
 }
 
@@ -71,12 +74,17 @@ template <class T>
 void Lista<T>::pushBack(T value) {
     Nodo<T>* novoNodo = new Nodo<T>();
     novoNodo->setValue(value);
-    novoNodo->setPrev(back);
-    if (front != NULL) {
+    if (back == NULL) {
+        novoNodo->setPrev(NULL);
+        novoNodo->setNext(NULL);
+        front = novoNodo;
+        back  = novoNodo;
+    } else {
+        novoNodo->setPrev(back);
+        novoNodo->setNext(NULL);
         back->setNext(novoNodo);
+        back = novoNodo;
     }
-    novoNodo->setNext(NULL);
-    back = novoNodo;
     tamanho++;
 }
 
@@ -84,12 +92,17 @@ template <class T>
 void Lista<T>::pushFront(T value) {
     Nodo<T>* novoNodo = new Nodo<T>();
     novoNodo->setValue(value);
-    novoNodo->setNext(front);
-    if (back != NULL) {
+    if (front == NULL) {
+        novoNodo->setPrev(NULL);
+        novoNodo->setNext(NULL);
+        front = novoNodo;
+        back  = novoNodo;
+    } else {
+        novoNodo->setPrev(NULL);
+        novoNodo->setNext(front);
         front->setPrev(novoNodo);
+        front = novoNodo;
     }
-    novoNodo->setPrev(NULL);
-    front = novoNodo;
     tamanho++;
 }
 
@@ -97,10 +110,16 @@ void Lista<T>::pushFront(T value) {
 template <class T>
 Nodo<T>* Lista<T>::popFront() {
     if (front == NULL) {
-        return NULL; // Lista vazia
+        return NULL;
     }
     Nodo<T>* nodoFrente = front;
-    front = front->getPrev();
+    front = front->getNext();
+
+    if (front != NULL)
+        front->setPrev(NULL);
+    else
+        back = NULL;
+
     tamanho--;
     return nodoFrente;
 }
@@ -109,10 +128,16 @@ Nodo<T>* Lista<T>::popFront() {
 template <class T>
 Nodo<T>* Lista<T>::popBack() {
     if (back == NULL) {
-        return NULL; // Lista vazia
+        return NULL;
     }
     Nodo<T>* nodoAtras = back;
-    back = back->getNext();
+    back = back->getPrev();
+
+    if (back != NULL)
+        back->setNext(NULL);
+    else 
+        front = NULL;
+
     tamanho--;
     return nodoAtras;
 }
@@ -121,28 +146,49 @@ Nodo<T>* Lista<T>::popBack() {
 template <class T>
 Nodo<T>* Lista<T>::popValue(T value) {
     Nodo<T>* nodoDeBusca = front;
-    while (nodoDeBusca->getValue != NULL) {
+    while (nodoDeBusca != NULL) {
         if (nodoDeBusca->getValue() == value) {
-            nodoDeBusca->getFront();
-            return nodoDeBusca->popPrev();
+
+            if (nodoDeBusca->getPrev() != NULL)
+                nodoDeBusca->getPrev()->setNext(nodoDeBusca->getNext());
+            else
+                front = nodoDeBusca->getNext();
+
+            if (nodoDeBusca->getNext() != NULL)
+                nodoDeBusca->getNext()->setPrev(nodoDeBusca->getPrev());
+            else
+                back = nodoDeBusca->getPrev();
+
+            tamanho--;
+            return nodoDeBusca;
         }
-        else if (nodoDeBusca->getValue() == value) {
-            nodoDeBusca->getBack();
-            return nodoDeBusca->popNext();
-        }
-        nodoDeBusca = nodoDeBusca->getPrev();
+        nodoDeBusca = nodoDeBusca->getNext();
+    }
+    return NULL;
+}
+
+
+template <class T>
+void Lista<T>::ordenar() {
+    Lista<T> buffer;
+    Nodo<T>* nodoDeletado = front;
+    while (nodoDeletado != NULL) {
+        
     }
 }
 
 
 template <class T>
 void Lista<T>::clear() {
-    while (front != NULL) {
-        Nodo<T>* nodeToDelete = front;
-        front = front->getPrev();
-        delete nodeToDelete;
+    Nodo<T>* nodoDeletado = front;
+    while (nodoDeletado != NULL) {
+        nodoDeletado = nodoDeletado->getNext();
+        delete nodoDeletado->getPrev();
+        front = nodoDeletado;
     }
-    tamanho = 0; // Reseta os contadores
+    front = NULL;
+    back = NULL;
+    tamanho = 0;
 }
 
 #endif // LISTA_H //
